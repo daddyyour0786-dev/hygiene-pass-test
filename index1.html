@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hygiene Pass Test Practice</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9; /* Softer light background */
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Card-based layout to mimic the app feel */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        /* Header tweaks */
+        header { padding-bottom: 20px; display: flex; align-items: center; }
+        .back-btn { color: #0f766e; text-decoration: none; font-weight: 600; }
+
+        .progress-bar-bg { height: 8px; background: #e5e7eb; border-radius: 4px; margin: 15px 0; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: #10b981; border-radius: 4px; transition: width 0.3s ease; }
+
+        .claim-label { color: #0f766e; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
+        .question-text { font-size: 22px; font-weight: 600; margin: 15px 0 30px; color: #111827; }
+
+        .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .option-btn {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .option-btn:hover { border-color: #0f766e; background: #f0fdfa; }
+        .option-btn.selected { border-color: #0f766e; background: #ccfbf1; }
+
+        .confirm-btn {
+            background: #0f766e;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 16px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .confirm-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        /* Feedback styling */
+        .feedback { padding: 20px; border-radius: 16px; margin-bottom: 20px; }
+        .correct { background: #d1fae5; color: #064e3b; }
+        .incorrect { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="#" class="back-btn">← Back</a>
+        </header>
+
+        <div class="card">
+            <div class="claim-label">Claim <span id="claim-number">1</span></div>
+            <div class="progress-bar-bg"><div id="progress" class="progress-bar-fill" style="width: 0%"></div></div>
+            
+            <div id="question-screen">
+                <div class="question-text" id="question-text">Loading...</div>
+                <div class="options">
+                    <button class="option-btn" id="true-btn" onclick="selectAnswer(true)">True</button>
+                    <button class="option-btn" id="false-btn" onclick="selectAnswer(false)">False</button>
+                </div>
+                <button class="confirm-btn" id="confirm-btn" onclick="submitAnswer()" disabled>Confirm answer</button>
+            </div>
+
+            <div id="feedback" style="display:none;" class="feedback">
+                <strong id="fb-title"></strong>
+                <p id="fb-explanation" style="margin: 10px 0;"></p>
+                <button class="confirm-btn" onclick="nextQuestion()">Next Question →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your logic remains the same, just ensure it hooks into the updated IDs
+        let currentQuestionIndex = 0;
+        let selected = null;
+        const questions = [ /* ... your data ... */ ];
+
+        function selectAnswer(val) {
+            selected = val;
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('confirm-btn').disabled = false;
+        }
+
+        function submitAnswer() {
+            const q = questions[currentQuestionIndex];
+            const isCorrect = selected === q.answer;
+            const fb = document.getElementById('feedback');
+            
+            fb.style.display = 'block';
+            fb.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+            document.getElementById('fb-title').textContent = isCorrect ? "Correct!" : "Incorrect";
+            document.getElementById('fb-explanation').textContent = q.explanation;
+            document.getElementById('question-screen').style.display = 'none';
+        }
+        
+        // ... include your progress bar and next logic here ...
+    </script>
+</body>
+</html>
